@@ -5,9 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Chat app</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
   </head>
-  <body>
-    <h1>Mini Chat</h1>
+  <body class="container">
+    <h1 class="mt-5">Mini Chat</h1>
+    <hr />
+
+    <form id="my-form">
+      <div class="row">
+        <div class="col-8">
+          <input
+            type="text"
+            name="message"
+            id="message"
+            class="form-control"
+            placeholder="message"
+          />
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <ul id="my-messages" class="mt-2"></ul>
+        </div>
+      </div>
+    </form>
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"
@@ -20,6 +49,10 @@
       // this is our socket client
       const socket = io("http://localhost:8080");
 
+      // elements DOM references
+      const myForm = document.querySelector("#my-form");
+      const myMessages = document.querySelector("#my-messages");
+
       // listening an event (we created the event "welcoming")
       socket.on("welcoming", (data) => {
         console.log(`The server send me something:
@@ -27,11 +60,11 @@
          date: ${data.currentDate} `);
       });
 
-      setTimeout(() => {
-        console.log("sending something to the client");
-        // sending an event to the server
-        socket.emit("client-sends", { message: "Hi there", client: "Sergio" });
-      }, 2000);
+      //   setTimeout(() => {
+      //     console.log("sending something to the client");
+      //     // sending an event to the server
+      //     socket.emit("client-sends", { message: "Hi there", client: "Sergio" });
+      //   }, 2000);
     </script>
   </body>
 </html>
