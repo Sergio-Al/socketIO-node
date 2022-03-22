@@ -13,5 +13,5 @@ io.on("connection", () => {
 });
 
 server.listen(8080, () => {
-  console.log("corriendo en puerto 8080");
+  console.log("app running on server 8080");
 });
