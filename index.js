@@ -12,8 +12,19 @@ const io = require("socket.io")(server);
 app.use(express.static(__dirname + "/public"));
 
 // listening to events
-io.on("connection", () => {
-  console.log("a new client has arrived!");
+io.on("connection", (socket) => {
+  // emiting an event
+  socket.emit("welcoming", {
+    message: "Welcome to the server",
+    currentDate: new Date().toISOString(),
+  });
+
+  // listening to events from client
+  socket.on("client-sends", (data) => {
+    console.log(`The client data is: 
+      message: ${data.message},
+      client: ${data.client}`);
+  });
 });
 
 server.listen(8080, () => {

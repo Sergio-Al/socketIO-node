@@ -17,7 +17,21 @@
     ></script>
     <script>
       // if we have deployed our server change http -> https
-      io("http://localhost:8080");
+      // this is our socket client
+      const socket = io("http://localhost:8080");
+
+      // listening an event (we created the event "welcoming")
+      socket.on("welcoming", (data) => {
+        console.log(`The server send me something:
+         message: ${data.message}
+         date: ${data.currentDate} `);
+      });
+
+      setTimeout(() => {
+        console.log("sending something to the client");
+        // sending an event to the server
+        socket.emit("client-sends", { message: "Hi there", client: "Sergio" });
+      }, 2000);
     </script>
   </body>
 </html>
