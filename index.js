@@ -13,17 +13,14 @@ app.use(express.static(__dirname + "/public"));
 
 // listening to events
 io.on("connection", (socket) => {
-  // emiting an event
-  socket.emit("welcoming", {
-    message: "Welcome to the server",
-    currentDate: new Date().toISOString(),
-  });
-
+    
   // listening to events from client
-  socket.on("client-sends", (data) => {
-    console.log(`The client data is: 
-      message: ${data.message},
-      client: ${data.client}`);
+  socket.on("client-message", (data) => {
+    console.log(`The client message is: 
+      message: ${data.text}`);
+    
+    // io emit the event to all clients connected with socket
+    io.emit("response-to-message", data)
   });
 });
 

@@ -22,7 +22,7 @@
           <input
             type="text"
             name="message"
-            id="message"
+            id="input-message"
             class="form-control"
             placeholder="message"
           />
@@ -52,19 +52,21 @@
       // elements DOM references
       const myForm = document.querySelector("#my-form");
       const myMessages = document.querySelector("#my-messages");
+      const textMessage = document.querySelector("#input-message");
 
-      // listening an event (we created the event "welcoming")
-      socket.on("welcoming", (data) => {
-        console.log(`The server send me something:
-         message: ${data.message}
-         date: ${data.currentDate} `);
+      myForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const newMessage = textMessage.value;
+
+        socket.emit("client-message", { text: newMessage });
       });
 
-      //   setTimeout(() => {
-      //     console.log("sending something to the client");
-      //     // sending an event to the server
-      //     socket.emit("client-sends", { message: "Hi there", client: "Sergio" });
-      //   }, 2000);
+      // listening the response from server
+      socket.on("response-to-message", (data) => {
+        console.log(data);
+        myMessages.innerHTML += `<li>${data.text}</li>`;
+      });
     </script>
   </body>
 </html>
