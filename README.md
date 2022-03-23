@@ -7,5 +7,5 @@ To connect as clients in our frontend/html apps we need a socket io instance [vi
 ## Tips show Heroku logs
 Run the following command to show heroku logs
 ```
-https://sergio-socket-server.herokuapp.com/
+heroku logs -n 1000 --tail
 ```
