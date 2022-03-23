@@ -5,38 +5,54 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Chat app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
     />
+    <link href="./styles/main.css" rel="stylesheet" />
   </head>
-  <body class="container">
-    <h1 class="mt-5">Mini Chat</h1>
+  <body class="flex flex-col items-center m-auto h-screen bg-slate-100">
+    <h1 class="text-4xl font-semibold mt-24">Simple Chat App</h1>
     <hr />
+    <div class="max-w-3xl w-full bg-white mt-6 rounded-3xl p-9 shadow-xl m-1">
+      <form id="my-form">
+        <div class="flex flex-col md:grid md:grid-cols-4">
+          <div class="col-span-3">
+            <input
+              type="text"
+              name="message"
+              autocomplete="off"
+              id="input-message"
+              class="form-control w-full md:w-5/6 h-full shadow-xl p-3 focus:outline-none"
+              placeholder="message"
+            />
+          </div>
+          <div class="col-span-1">
+            <button
+              type="submit"
+              class="mt-5 md:mt-0 w-full bg-cyan-800 rounded-xl text-white text-2xl p-4 shadow-xl"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </form>
 
-    <form id="my-form">
-      <div class="row">
-        <div class="col-8">
-          <input
-            type="text"
-            name="message"
-            id="input-message"
-            class="form-control"
-            placeholder="message"
-          />
+      <div id="my-messages" class="flex flex-col mt-10">
+        <div
+          class="p-5 bg-green-200 mt-5 font-light rounded-self-message w-fit"
+        >
+          Hi how are you
         </div>
-        <div class="col-4">
-          <button type="submit" class="btn btn-primary">Send</button>
+        <div
+          class="p-5 bg-blue-200 mt-5 font-light rounded-other-message w-fit self-end"
+        >
+          Hi there
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <ul id="my-messages" class="mt-2"></ul>
-        </div>
-      </div>
-    </form>
+    </div>
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"
@@ -47,6 +63,10 @@
     <script>
       // if we have deployed our server change http -> https
       // this is our socket client
+      // uncomment this code for dev mode, comment otherwise
+      //const socket = io("http://localhost:8080");
+
+      // uncommet this code for production, comment for dev
       const socket = io("https://sergio-socket-server.herokuapp.com/");
 
       // elements DOM references
@@ -59,13 +79,27 @@
 
         const newMessage = textMessage.value;
 
-        socket.emit("messages-from-client", { text: newMessage });
+        socket.emit("messages-from-client", {
+          text: newMessage,
+          id: socket.id,
+        });
       });
 
       // listening the response from server
       socket.on("response-to-message", (data) => {
         console.log(data);
-        myMessages.innerHTML += `<li>${data.text}</li>`;
+        myMessages.innerHTML +=
+          data.id === socket.id
+            ? `<div
+          class="p-5 bg-green-200 mt-5 font-light rounded-self-message w-fit"
+        >
+          ${data.text}
+        </div>`
+            : `<div
+          class="p-5 bg-blue-200 mt-5 font-light rounded-other-message w-fit self-end"
+        >
+          ${data.text}
+        </div>`;
       });
     </script>
   </body>
