@@ -59,7 +59,7 @@
 
         const newMessage = textMessage.value;
 
-        socket.emit("client-message", { text: newMessage });
+        socket.emit("messages-from-client", { text: newMessage });
       });
 
       // listening the response from server

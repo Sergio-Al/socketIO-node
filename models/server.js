@@ -6,6 +6,7 @@ const http = require("http");
 
 const socketio = require("socket.io");
 const path = require("path");
+const Sockets = require("./sockets");
 
 class Server {
   constructor() {
@@ -27,7 +28,7 @@ class Server {
   }
 
   settingSockets() {
-      // future code...
+    new Sockets(this.io);
   }
 
   execute() {
